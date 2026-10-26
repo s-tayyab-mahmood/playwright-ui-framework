@@ -52,6 +52,8 @@ export class InventoryPage extends BasePage {
   }
 
   async imageSources(): Promise<string[]> {
+    // evaluateAll doesn't wait, so make sure the list has rendered first
+    await this.items.first().waitFor();
     return this.items.locator('img').evaluateAll((imgs) =>
       imgs.map((img) => (img as HTMLImageElement).getAttribute('src') ?? ''),
     );

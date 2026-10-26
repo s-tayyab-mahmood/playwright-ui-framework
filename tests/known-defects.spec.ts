@@ -14,8 +14,10 @@ test.describe('Known defects @regression', () => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
     await loginPage.login(users.problem);
+    await expect(page).toHaveURL(/inventory\.html/);
     const sources = await new InventoryPage(page).imageSources();
 
+    expect(sources).toHaveLength(Object.keys(products).length);
     expect(new Set(sources).size).toBe(sources.length);
   });
 
@@ -27,7 +29,8 @@ test.describe('Known defects @regression', () => {
 
     const start = Date.now();
     await loginPage.login(users.performanceGlitch);
-    await expect(page).toHaveURL(/inventory\.html/, { timeout: 15_000 });
+    // Stop the clock when the products are on screen, not when the URL changes
+    await new InventoryPage(page).items.first().waitFor({ timeout: 15_000 });
     const elapsed = Date.now() - start;
 
     expect(elapsed, `login took ${elapsed}ms`).toBeLessThan(2_000);

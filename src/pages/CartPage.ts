@@ -16,6 +16,8 @@ export class CartPage extends BasePage {
   }
 
   async names(): Promise<string[]> {
+    // The Checkout button only exists on the cart page. Without this wait a fast read can still see the product list.
+    await this.checkoutButton.waitFor();
     return this.itemNames.allTextContents();
   }
 }

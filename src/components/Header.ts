@@ -10,7 +10,7 @@ export class Header {
   readonly logoutLink: Locator;
   readonly resetAppStateLink: Locator;
 
-  constructor(page: Page) {
+  constructor(private readonly page: Page) {
     this.cartLink = page.getByTestId('shopping-cart-link');
     this.cartBadge = page.getByTestId('shopping-cart-badge');
     this.menuButton = page.getByRole('button', { name: 'Open Menu' });
@@ -23,6 +23,8 @@ export class Header {
 
   async openCart(): Promise<void> {
     await this.cartLink.click();
+    // The URL changes before the cart renders, so wait for the cart title rather than the URL
+    await this.page.getByTestId('title').filter({ hasText: 'Your Cart' }).waitFor();
   }
 
   async openMenu(): Promise<void> {
