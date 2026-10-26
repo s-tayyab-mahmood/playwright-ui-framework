@@ -10,22 +10,17 @@ on:
 
 jobs:
   test:
-    # Pinned: ubuntu-latest is moving to Ubuntu 26, which Playwright's system deps may not support yet
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Official Playwright image: browsers and system libraries are preinstalled, so there is
+    # no "playwright install --with-deps" step to hang. Keep the tag in step with @playwright/test.
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --user 1001
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - project: chromium
-            browser: chromium
-          # the login "setup" project runs on Chromium, so every job needs Chromium too
-          - project: firefox
-            browser: chromium firefox
-          - project: webkit
-            browser: chromium webkit
-          - project: mobile-chrome
-            browser: chromium
+        project: [chromium, firefox, webkit, mobile-chrome]
     steps:
       - uses: actions/checkout@v5
 
@@ -39,11 +34,6 @@ jobs:
 
       - name: Type-check
         run: npm run typecheck
-
-      # Only the browser this job needs - installing all three is slow and occasionally hung for 30 minutes
-      - name: Install browsers (${{ matrix.browser }})
-        timeout-minutes: 8
-        run: npx playwright install --with-deps ${{ matrix.browser }}
 
       - name: Run tests (${{ matrix.project }})
         run: npx playwright test --project=${{ matrix.project }}
