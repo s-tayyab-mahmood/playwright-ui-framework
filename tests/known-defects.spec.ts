@@ -2,6 +2,7 @@ import { test, expect } from '@fixtures/test';
 import { LoginPage } from '@pages/LoginPage';
 import { InventoryPage } from '@pages/InventoryPage';
 import { users } from '@data/users';
+import { products } from '@data/products';
 
 // Deliberate bugs in the demo accounts. test.fail() keeps CI green until they're fixed.
 test.use({ storageState: { cookies: [], origins: [] } });
@@ -30,5 +31,19 @@ test.describe('Known defects @regression', () => {
     const elapsed = Date.now() - start;
 
     expect(elapsed, `login took ${elapsed}ms`).toBeLessThan(2_000);
+  });
+
+  test('Reset App State should also reset the Add/Remove buttons', async ({ page }) => {
+    test.fail(true, 'DEFECT: after Reset App State the buttons still say Remove until the page is reloaded');
+
+    const loginPage = new LoginPage(page);
+    await loginPage.goto();
+    await loginPage.login(users.standard);
+    const inventory = new InventoryPage(page);
+    await inventory.addToCart(products.backpack);
+
+    await inventory.header.resetAppState();
+
+    await expect(inventory.addToCartButton(products.backpack)).toBeVisible({ timeout: 2_000 });
   });
 });

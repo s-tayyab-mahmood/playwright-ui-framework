@@ -10,7 +10,7 @@ UI tests for [Sauce Demo](https://www.saucedemo.com) with Playwright and TypeScr
 
 - Page objects in `src/pages`, passed into tests as fixtures (`src/fixtures/test.ts`)
 - Login runs once in `auth.setup.ts` and the session is reused, so tests don't log in every time
-- Login, inventory (sorting, cart), and checkout tests, including checking the order total and tax
+- Login, inventory (sorting, cart), product details, side menu and checkout tests, including checking the order total and tax
 - Accessibility scan with axe-core (only critical issues fail the build)
 - `known-defects.spec.ts` covers the site's deliberately broken users (`problem_user`, `performance_glitch_user`)
   using `test.fail()`

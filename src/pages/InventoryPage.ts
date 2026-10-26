@@ -33,6 +33,10 @@ export class InventoryPage extends BasePage {
     }
   }
 
+  async openProduct(product: Product): Promise<void> {
+    await this.itemNames.filter({ hasText: product.name }).click();
+  }
+
   async sortBy(option: SortOption): Promise<void> {
     await this.sortSelect.selectOption(option);
   }
