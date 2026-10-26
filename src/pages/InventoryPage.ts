@@ -35,6 +35,8 @@ export class InventoryPage extends BasePage {
 
   async openProduct(product: Product): Promise<void> {
     await this.itemNames.filter({ hasText: product.name }).click();
+    // The URL changes before the details page renders, so wait for something only that page has
+    await this.page.getByTestId('back-to-products').waitFor();
   }
 
   async sortBy(option: SortOption): Promise<void> {
