@@ -1,6 +1,6 @@
 # playwright-ui-framework
 
-![Playwright Tests](https://github.com/YOUR_GITHUB_USERNAME/playwright-ui-framework/actions/workflows/playwright.yml/badge.svg)
+![Playwright Tests](https://github.com/s-tayyab-mahmood/playwright-ui-framework/actions/workflows/playwright.yml/badge.svg)
 
 UI tests for [Sauce Demo](https://www.saucedemo.com) with Playwright and TypeScript.
 
